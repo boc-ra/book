@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookdiary',
     'widget_tweaks',
-    'bootstrap4',
+    'django_bootstrap5',
     'accounts',
     'django.contrib.sites',
     'allauth', 
