@@ -1,10 +1,12 @@
 {% load django_bootstrap5 %}
+
 <!DOCTYPE html>
 <html lang="jp">
 
 <head>
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% load static %}
     <meta charset="UTF-8">
     <title>Book Diary</title>
 </head>
@@ -19,14 +21,16 @@
             <a class="navbar-brand" href="{% url 'bookdiary:index' %}">BookDiary</a>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="{% url 'bookdiary:index' %}">ホーム</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{% url 'bookdiary:bookdiary_create' %}">記録</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{% url 'bookdiary:bookdiary_list' %}">記録の閲覧</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'bookdiary:index' %}"><img src="{% static 'image/home.png'%}" alt=""></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'bookdiary:bookdiary_create' %}"><img src="{% static 'image/pen.png'%}" alt=""></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'bookdiary:bookdiary_list' %}"><img src="{% static 'image/serch.png'%}"alt=""></a></li>
                 </ul>
             </div>
-            <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">ユーザー名：{{ user.get_username }}</a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <link rel="stylesheet" href="{% static 'css/style.css' %}">
+            <div class="nav-item dropdown ms-auto">
+                
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{% static 'image/user.png'%}"alt="ユーザー名：{{ user.get_username }}"></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="{% url 'account_logout' %}">ログアウト</a></li>
                   <li><a class="dropdown-item" href="{% url 'account_email' %}">登録情報</a></li>
                   <!-- <li><a class="dropdown-item" href="{% url 'account_email' %}">あああ</a></li> -->
