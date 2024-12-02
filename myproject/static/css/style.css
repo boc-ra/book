@@ -1,0 +1,10 @@
+.navbar img:hover {
+    transform: scale(1.5);
+  }
+  
+.navbar img {
+    max-width: 3vw;
+    height: auto;
+    transition: all 0.2s ease-in-out;
+}
+
