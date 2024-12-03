@@ -8,3 +8,16 @@
     transition: all 0.2s ease-in-out;
 }
 
+.toggle-text {
+  display: none; 
+}
+
+.navbar-collapse.show .toggle-text{
+  display: inline;
+}
+
+@media (min-width: 992px) {
+  .toggle-text {
+      display: none; 
+  }
+}
