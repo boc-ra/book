@@ -5,9 +5,23 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from accounts.models import CustomUser
-
+from dotenv import load_dotenv
 from .models import Bookdiary
 from .forms import BookdiaryForm
+
+import os
+import random
+import requests
+
+
+load_dotenv()
+
+def get_random_books(api_key, count=5):
+    url = f'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&langRestrict=ja&key={api_key}'
+    response = requests.get(url)
+    books = response.json().get('items', [])
+    random_books = random.sample(books, min(count, len(books)))
+    return random_books
 
 class OwnerOnly(UserPassesTestMixin):
     def test_func(self):
@@ -16,6 +30,12 @@ class OwnerOnly(UserPassesTestMixin):
 
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        api_key = os.getenv('GOOGLE_BOOKS_API_KEY')
+        context['random_books'] = get_random_books(api_key)
+        return context
 
 class BookdiaryCreateView(LoginRequiredMixin, CreateView):
     template_name = 'bookdiary_create.html'
