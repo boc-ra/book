@@ -21,3 +21,47 @@
       display: none; 
   }
 }
+
+.card {
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  height: 400px; /* カードの高さを一定に設定 */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+  max-height: 200px; /* 画像の最大高さを設定 */
+  object-fit: cover; /* 画像をカードのサイズに合わせてトリミング */
+}
+
+.card-body {
+  padding: 20px;
+  text-align: center;
+  overflow-y: auto; /* 本文の部分をスクロール可能にする */
+  flex-grow: 1;
+}
+
+.carousel-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.carousel-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
