@@ -1,67 +1,46 @@
 .navbar img:hover {
-    transform: scale(1.5);
-  }
-  
+  transform: scale(1.5);
+}
+
 .navbar img {
-    max-width: 3vw;
-    height: auto;
-    transition: all 0.2s ease-in-out;
+  max-width: 3vw;
+  height: auto;
+  transition: all 0.2s ease-in-out;
 }
 
 .toggle-text {
-  display: none; 
+display: none; 
 }
 
 .navbar-collapse.show .toggle-text{
-  display: inline;
+display: inline;
 }
 
 @media (min-width: 992px) {
-  .toggle-text {
-      display: none; 
-  }
+.toggle-text {
+    display: none; 
+}
 }
 
-.card {
-  margin: 20px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #fff;
-  height: 400px; /* カードの高さを一定に設定 */
+.carousel {
   display: flex;
-  flex-direction: column;
-}
-
-.card-img-top {
-  width: 100%;
-  height: auto;
-  max-height: 200px; /* 画像の最大高さを設定 */
-  object-fit: cover; /* 画像をカードのサイズに合わせてトリミング */
-}
-
-.card-body {
-  padding: 20px;
-  text-align: center;
-  overflow-y: auto; /* 本文の部分をスクロール可能にする */
-  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .carousel-inner {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
 }
 
 .carousel-item {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
 }
 
-.carousel-control-prev,
-.carousel-control-next {
-  width: 5%;
+.card {
+  margin: 0 auto;
 }
