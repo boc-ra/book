@@ -16,7 +16,7 @@ import requests
 
 load_dotenv()
 
-def get_random_books(api_key, count=5):
+def get_random_books(api_key, count=6):
     url = f'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&langRestrict=ja&key={api_key}'
     response = requests.get(url)
     books = response.json().get('items', [])

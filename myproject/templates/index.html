@@ -4,55 +4,18 @@
 <h2><a href="{% url 'bookdiary:bookdiary_create' %}">記録する</a></h2>
 <h2><a href="{% url 'bookdiary:bookdiary_list' %}">記録の閲覧</a></h2>
 <h2>おすすめの書籍</h2>
-
-
-<div id="carouselExampleCaptions" class="carousel slide">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-            aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-            aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-            aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
+<div class="container">
+    <div class="row">
         {% for book in random_books %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <div class="card mb-3" style="max-width: 540px;">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" alt="{{ book.volumeInfo.title }}">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ book.volumeInfo.title }}</h5>
-                            <p class="card-text">{{ book.volumeInfo.authors|join:", " }}</p>
-                            <p class="card-text">{{ book.volumeInfo.description }}</p>
-                            <a href="{{ book.volumeInfo.previewLink }}" class="btn btn-primary">詳細</a>
-                        </div>
-                    </div>
+        <div class="col-md-6 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.volumeInfo.title }}</h5>
+                    <p class="card-text">{{ book.volumeInfo.authors|join:", " }}</p>
                 </div>
             </div>
         </div>
         {% endfor %}
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
-    <!-- <div class="row flex-row flex-nowrap overflow-auto">
-        {% for book in random_books %}
-        <div class="col-6">
-            <div class="card card-block h-100">
-                Card 1
-            </div>
-        </div>
-        {% endfor %}
-    </div> -->
-    {% endblock %}
+</div>
+{% endblock %}
