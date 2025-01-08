@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from accounts.models import CustomUser
 from dotenv import load_dotenv
@@ -28,6 +30,7 @@ class OwnerOnly(UserPassesTestMixin):
         object = self.get_object()
         return object.user == self.request.user
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
 
