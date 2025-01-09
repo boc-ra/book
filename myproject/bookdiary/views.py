@@ -18,13 +18,18 @@ import requests
 
 load_dotenv()
 
-def get_random_books(api_key, count=6):
-    url = f'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&langRestrict=ja&key={api_key}'
-    response = requests.get(url)
-    books = response.json().get('items', [])
-    random_books = random.sample(books, min(count, len(books)))
+def get_random_books(api_key):
+    categories = ['fiction', 'nonfiction', 'mystery', 'fantasy', 'science', 'history']
+    books = []
+    
+    for category in categories:
+        url = f'https://www.googleapis.com/books/v1/volumes?q=subject:{category}&langRestrict=ja&key={api_key}'
+        response = requests.get(url)
+        category_books = response.json().get('items', [])
+        books.extend(category_books)
+    
+    random_books = random.sample(books, min(6, len(books)))
     return random_books
-
 class OwnerOnly(UserPassesTestMixin):
     def test_func(self):
         object = self.get_object()
