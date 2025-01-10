@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+<h1>記録の作成</h1>
+<link rel="stylesheet" href="{% static 'css/bd_create.css' %}">
+<div class="container">
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>{{ form.date.label }}</label>
+                {{ form.date | add_class:'form-control col-2' }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.title.label }}</label>
+                {{ form.title | add_class:'form-control col-2' }}
+                <ul id="book-suggestions"></ul>
+            </div>
+            <div class="form-group">
+                <label>{{ form.writer.label }}</label>
+                {{ form.writer | add_class:'form-control col-2' }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.text.label }}</label>
+                {{ form.text | add_class:'form-control col-2' }}
+            </div>
+            <button type="submit" class="form-control col-1">記録</button>
+        </form>
+    </div>
+    <div id="thumbnail-container" class="thumbnail-container">
+        <img id="book-thumbnail" src="{% static 'image/book.png' %}" alt="thumbnail" />
+    </div>
+</div>
+
+<script>
+    let debounceTimer;
+
+    document.getElementById('book-title').addEventListener('input', function () {
+        let query = this.value;
+        if (query.length < 3) {
+            document.getElementById('book-suggestions').innerHTML = ''; // 入力が3文字未満の場合、候補を非表示
+            document.getElementById('book-thumbnail').src = "{% static 'image/book.png' %}"; // デフォルト画像
+            return;
+        }
+
+        // 入力のたびにタイマーをリセットし、500ms後にAPI呼び出し
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(function () {
+            fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${query}`)
+                .then(response => {
+                    // 429エラーが返された場合
+                    if (response.status === 429) {
+                        alert('リクエストが多すぎます。しばらくしてから再試行してください。');
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.items) {
+                        let suggestions = data.items;
+                        let suggestionList = document.getElementById('book-suggestions');
+                        suggestionList.innerHTML = ''; // 以前の候補をクリア
+
+                        // 最大5件の候補を表示
+                        suggestions.slice(0, 5).forEach(function (item) {
+                            let listItem = document.createElement('li');
+                            listItem.textContent = item.volumeInfo.title;
+
+                            listItem.addEventListener('click', function () {
+                                document.getElementById('book-title').value = item.volumeInfo.title; // タイトルを設定
+                                document.getElementById('book-writer').value = item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown'; // 筆者を設定
+                                suggestionList.innerHTML = ''; // 候補リストをクリア
+
+                                // サムネイル画像を設定
+                                if (item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail) {
+                                    document.getElementById('book-thumbnail').src = item.volumeInfo.imageLinks.thumbnail;
+                                } else {
+                                    document.getElementById('book-thumbnail').src = "{% static 'image/book.png' %}"; // デフォルト画像
+                                }
+                            });
+
+                            suggestionList.appendChild(listItem);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching books:', error));
+        }, 500);  // 500msの遅延後にリクエストを送信
+    });
+</script>
+
+<!-- <script>
+    const titleFieldId = "{{ form.title.id_for_label }}"; 
+    const writerFieldId = "{{ form.writer.id_for_label }}"; 
+    const titleField = document.getElementById(titleFieldId);
+
+    document.getElementById(titleFieldId).addEventListener('input', function () {
+        let query = this.value.trim();
+        let suggestionList = document.getElementById('book-suggestions');
+        let thumbnail = document.getElementById('book-thumbnail');
+
+        if (query.length < 3) {
+            suggestionList.innerHTML = '';
+            thumbnail.src = "{% static 'image/book.png' %}";
+            return;
+        }
+
+        fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${query}`)
+            .then(response => response.json())
+            .then(data => {
+                let suggestions = data.items || [];
+                suggestionList.innerHTML = '';
+
+                suggestions.forEach(function (item) {
+                    let listItem = document.createElement('li');
+                    listItem.textContent = item.volumeInfo.title;
+
+                    listItem.addEventListener('click', function () {
+                        // フォームに選択された書籍情報を反映
+                        titleField.value = item.volumeInfo.title;
+                        document.getElementById(writerFieldId).value = item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown';
+                        suggestionList.innerHTML = '';
+
+                        // サムネイルを表示
+                        if (item.volumeInfo.imageLinks) {
+                            thumbnail.src =
+                                item.volumeInfo.imageLinks.extraLarge ||
+                                item.volumeInfo.imageLinks.large ||
+                                item.volumeInfo.imageLinks.medium ||
+                                item.volumeInfo.imageLinks.thumbnail;
+                        } else {
+                            thumbnail.src = "{% static 'image/book.png' %}";
+                        }
+                    });
+                    suggestionList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching books:', error);
+                suggestionList.innerHTML = '';
+                thumbnail.src = "{% static 'image/book.png' %}";
+            });
+    });
+    document.getElementById('book-thumbnail').addEventListener('click', function () {
+        this.classList.toggle('enlarged');
+    });
+
+</script> -->
+{% endblock %}

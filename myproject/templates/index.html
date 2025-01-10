@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block content %}
+<h1>おすすめ書籍</h1>
+<div class="card01 l-section">
+    <div class="l-inner">
+        <div class="swiper-area">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    {% for book in random_books %}
+                    <div class="swiper-slide">
+                        <article class="slide">
+                            <div class="slide-media img-cover">
+                                {% if book.volumeInfo.imageLinks and book.volumeInfo.imageLinks.thumbnail %}
+                                <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" alt="{{ book.volumeInfo.title }}">
+                                {% else %}
+                                <img src="{% static 'image/no_image_available.png' %}" alt="No Image Available">
+                                {% endif %}
+                            </div>
+                            <div class="slide-content">
+                                <h2 class="slide-title">{{ book.volumeInfo.title }}</h2>
+                                <p class="slide-author">{{ book.volumeInfo.authors|join:", " }}</p>
+                            </div>
+                        </article>
+                    </div>
+                    {% endfor %}
+                </div><!-- /swiper-wrapper -->
+            </div><!-- /swiper -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div><!-- /swiper-area -->
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+<script>
+    const mySwiper = new Swiper('.card01 .swiper', {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        grabCursor: true,
+        pagination: {
+            el: '.card01 .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.card01 .swiper-button-next',
+            prevEl: '.card01 .swiper-button-prev',
+        },
+        breakpoints: {
+            600: {
+                slidesPerView: 2,
+            },
+            1025: {
+                slidesPerView: 4,
+                spaceBetween: 32,
+            }
+        },
+    });
+</script>
+{% endblock %}
