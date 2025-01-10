@@ -22,20 +22,21 @@ def get_random_books(api_key):
     categories = ['fiction', 'nonfiction', 'mystery', 'fantasy', 'science', 'history']
     books = []
     
-    for category in categories:
+    for _ in range(10):
+        category = random.choice(categories)
         url = f'https://www.googleapis.com/books/v1/volumes?q=subject:{category}&langRestrict=ja&key={api_key}'
         response = requests.get(url)
         category_books = response.json().get('items', [])
-        books.extend(category_books)
+        if category_books:
+            books.append(random.choice(category_books))
     
-    random_books = random.sample(books, min(6, len(books)))
-    return random_books
+    return books
 class OwnerOnly(UserPassesTestMixin):
     def test_func(self):
         object = self.get_object()
         return object.user == self.request.user
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+# @method_decorator(cache_page(60 * 15), name='dispatch')
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
 
@@ -67,10 +68,10 @@ class BookdiaryListView(LoginRequiredMixin, ListView):
     model = Bookdiary
     
     def get_queryset(self):
-        current_user = self.request.user.username # ログイン中のユーザ名を取得（CustomUserモデルのusernameレコードの値を取得）
-        user_data = CustomUser.objects.get(username=current_user) # QuerySet(条件が一致するレコードを全て取得)
+        current_user = self.request.user.username 
+        user_data = CustomUser.objects.get(username=current_user) 
         if user_data:
-            queryset = Bookdiary.objects.filter(user=user_data).all() # QuerySet（一致するレコード全て取得）
+            queryset = Bookdiary.objects.filter(user=user_data).all()
             queryset = queryset.order_by("created_at")
         return queryset
     
