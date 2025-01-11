@@ -1,6 +1,59 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% block content %}
-<h1>Diary App by Django</h1>
-<h2><a href="{% url 'bookdiary:bookdiary_create' %}">記録する</a></h2>
-<h2><a href="{% url 'bookdiary:bookdiary_list' %}">記録の閲覧</a></h2>
+<h1>おすすめ書籍</h1>
+<div class="card02 l-section">
+    <div class="l-inner">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                {% for book in random_books %}
+                <article class="swiper-slide slide">
+                    <div class="slide-media img-cover">
+                        {% if book.volumeInfo.imageLinks and book.volumeInfo.imageLinks.thumbnail %}
+                        <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" alt="{{ book.volumeInfo.title }}" class="book-thumbnail">
+                        {% else %}
+                        <img src="{% static 'image/no_image_available.png' %}" alt="No Image Available" class="book-thumbnail no-image">
+                        {% endif %}
+                    </div>
+                    <div class="slide-content">
+                        <a href="{{ book.volumeInfo.infoLink }}" target="_blank">
+                            <h2 class="slide-title">{{ book.volumeInfo.title }}</h2>
+                        </a>
+                        <p class="slide-author">{{ book.volumeInfo.authors|join:", " }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            <div class="swiper-controller">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const mySwiper = new Swiper('.card02 .swiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 16,
+        grabCursor: true,
+        pagination: {
+            el: '.card02 .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.card02 .swiper-button-next',
+            prevEl: '.card02 .swiper-button-prev',
+        },
+        loop: true,
+        breakpoints: {
+            1025: {
+                spaceBetween: 32,
+            }
+        },
+    });
+</script>
 {% endblock %}

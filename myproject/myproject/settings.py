@@ -13,19 +13,24 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 import os
+from dotenv import load_dotenv
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(verbose=True)
+dotenv_path = os.path.join(BASE_DIR, ".env")
+load_dotenv(dotenv_path)
+
+SECRET_KEY = os.getenv('SECRET_KEY')
+GOOGLE_BOOKS_API_KEY = os.getenv('GOOGLE_BOOKS_API_KEY')
+DEBUG = os.getenv('DEBUG')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(s#axq^_9u(yl3gaaawb^ot9nr1!w=$5gw55fs)=-1x^u&8+ub'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -41,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookdiary',
     'widget_tweaks',
-    'bootstrap4',
+    'django_bootstrap5',
     'accounts',
     'django.contrib.sites',
     'allauth', 
@@ -135,6 +140,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -154,6 +163,15 @@ ACCOUNT_EMAIL_REQUIRED = True # サインアップ（ユーザー登録）の時
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # メール検証を必須とする
 
 LOGIN_URL = '/account/login/' # ログインURLの設定
-LOGIN_REDIRECT_URL = '/index/' # ログイン後のリダイレクト先
+LOGIN_REDIRECT_URL = '/home/' # ログイン後のリダイレクト先
 ACCOUNT_LOGOUT_REDIRECT_URL = '/account/login/' #　ログアウト後のリダイレクト先
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
