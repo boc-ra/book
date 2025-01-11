@@ -68,12 +68,20 @@ class BookdiaryListView(LoginRequiredMixin, ListView):
     model = Bookdiary
     
     def get_queryset(self):
-        current_user = self.request.user.username 
-        user_data = CustomUser.objects.get(username=current_user) 
-        if user_data:
-            queryset = Bookdiary.objects.filter(user=user_data).all()
-            queryset = queryset.order_by("created_at")
-        return queryset
+        queryset = super().get_queryset()
+        current_user = self.request.user
+        queryset = queryset.filter(user=current_user)
+        
+        search_type = self.request.GET.get('search_type')
+        search_query = self.request.GET.get('search_query')
+
+        if search_type and search_query:
+            if search_type == 'title':
+                queryset = queryset.filter(title__icontains=search_query)
+            elif search_type == 'writer':
+                queryset = queryset.filter(writer__icontains=search_query)
+        
+        return queryset.order_by("created_at")
     
 
 class BookdiaryDetailView(LoginRequiredMixin, OwnerOnly, DetailView):
