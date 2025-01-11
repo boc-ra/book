@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for bookdiary in bookdiary_list %}
+<p>
+    {{ bookdiary.date }}
+    <a href="{% url 'bookdiary:bookdiary_detail' bookdiary.pk %}">{{ bookdiary.title }}</a>
+</p>
+{% endfor %}
+<a href="{% url 'bookdiary:index' %}">戻る</a>
+{% endblock %}
