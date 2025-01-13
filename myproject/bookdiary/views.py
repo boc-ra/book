@@ -36,7 +36,7 @@ class OwnerOnly(UserPassesTestMixin):
         object = self.get_object()
         return object.user == self.request.user
 
-# @method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
 
@@ -81,7 +81,7 @@ class BookdiaryListView(LoginRequiredMixin, ListView):
             elif search_type == 'writer':
                 queryset = queryset.filter(writer__icontains=search_query)
         
-        return queryset.order_by("created_at")
+        return queryset.order_by("date")
     
 
 class BookdiaryDetailView(LoginRequiredMixin, OwnerOnly, DetailView):
