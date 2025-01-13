@@ -36,7 +36,7 @@ class OwnerOnly(UserPassesTestMixin):
         object = self.get_object()
         return object.user == self.request.user
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+# @method_decorator(cache_page(60 * 15), name='dispatch')
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
 
