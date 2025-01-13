@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h2>記録一覧</h2>
+<form method="get" class="mb-3">
+    <div class="input-group mb-3">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="searchTypeButton" style="width: 20%;">
+            <span id="searchTypeText">タイトル</span> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" onclick="setSearchType('title', 'タイトル')">タイトル</a></li>
+            <li><a class="dropdown-item" onclick="setSearchType('writer', '作者')">作者</a></li>
+        </ul>
+        <input type="hidden" name="search_type" id="search_type" value="title">
+        <input type="text" name="search_query" id="search_query" class="form-control" aria-label="Text input with dropdown button" placeholder="キーワードを入力">
+        <button type="submit" class="btn btn-primary">検索</button>
+    </div>
+</form>
+
+<button type="button" class="btn btn-outline-success" onclick="resetForm()">検索条件リセット</button>
+
+{% if bookdiary_list %}
+    <div class="list-group">
+        {% for bookdiary in bookdiary_list %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="date">{{ bookdiary.date|date:"Y/m/d" }}</span>
+            <a href="{% url 'bookdiary:bookdiary_detail' bookdiary.pk %}" class="title">{{ bookdiary.title }}</a>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>該当する記録が見つかりませんでした。</p>
+{% endif %}
+
+<script>
+    function setSearchType(value, text) {
+        document.getElementById('search_type').value = value;
+        document.getElementById('searchTypeButton').innerHTML = text + ' <span class="caret"></span>';
+    }
+
+    function resetForm() {
+        document.getElementById('search_type').value = 'title';
+        document.getElementById('search_query').value = '';
+        document.getElementById('searchTypeButton').innerHTML = 'タイトル <span class="caret"></span>';
+        document.forms[0].submit();
+    }
+</script>
+{% endblock %}

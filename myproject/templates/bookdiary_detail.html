@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="detail-container">
+    <div class="detail-item">
+        <span class="detail-label">日付</span>
+        <span class="detail-content">{{ bookdiary.date|date:"Y/m/d" }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">作者</span>
+        <span class="detail-content">{{ bookdiary.writer }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">タイトル</span>
+        <span class="detail-content">{{ bookdiary.title }}</span>
+    </div>
+</div>
+
+<div class="detail-item">
+    <span class="detail-label">レビュー</span>
+</div>
+<div class="detail-text-container">
+    <div class="detail-item">
+        <span class="detail-text">{{ bookdiary.text }}</span>
+    </div>
+</div>
+
+<div class="detail-actions">
+    <a href="{% url 'bookdiary:bookdiary_update' bookdiary.pk %}" class="btn btn-outline-primary">編集</a>
+    <a href="{% url 'bookdiary:bookdiary_delete' bookdiary.pk %}" class="btn btn-outline-danger">削除</a>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/bd_detail.css' %}">
+{% endblock %}
