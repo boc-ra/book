@@ -25,9 +25,9 @@
             <a class="navbar-brand" href="{% url 'bookdiary:index' %}">BookDiary</a>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active toggle-item" href="{% url 'bookdiary:index' %}"><img src="{% static 'image/home.png'%}" alt=""><span class="toggle-text">ホーム</span></a></li>
-                    <li class="nav-item"><a class="nav-link active toggle-item" href="{% url 'bookdiary:bookdiary_create' %}"><img src="{% static 'image/pen.png'%}" alt=""><span class="toggle-text">作成</span></a></li>
-                    <li class="nav-item"><a class="nav-link active toggle-item" href="{% url 'bookdiary:bookdiary_list' %}"><img src="{% static 'image/serch.png'%}"alt=""><span class="toggle-text">検索</span></a></li>
+                    <li class="nav-item"><a class="nav-link active toggle-item" href="{% url 'bookdiary:index' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active toggle-item" href="{% url 'bookdiary:bookdiary_create' %}">New Record</a></li>
+                    <li class="nav-item"><a class="nav-link active toggle-item" href="{% url 'bookdiary:bookdiary_list' %}">My Record</a></li>
                 </ul>
             </div>
             
@@ -35,14 +35,19 @@
                 
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{% static 'image/user.png'%}"alt="ユーザー名：{{ user.get_username }}"></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="{% url 'account_logout' %}">ログアウト</a></li>
-                  <li><a class="dropdown-item" href="{% url 'account_email' %}">登録情報</a></li>
+                  <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
+                  <li><a class="dropdown-item" href="{% url 'account_email' %}">My Account</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    {% block content %}
-    {% endblock %}
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <a href="https://github.com/boc-ra/book">GitHub</a>
+    </footer>
     <script src="{% static 'js/scripts.js' %}"></script>
 </body>
 
